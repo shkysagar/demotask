@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="row g-4" id="product-Data-Div">
+    </div> 
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/GetProductListing',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#loader').hide();
+                    data.forEach(function (p) {
+                        let products = `
+                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                        <div class="card" key="${p.id}">
+                          <img src="${p.imageURL}" class="card-img-top object-fit-cover" height="140" alt="${p.id} - ${p.productName}"/>
+                          <div class="card-body">
+                              <div class="d-flex align-items-center justify-content-between">
+                              <h5 class="card-title mb-0">${p.productName}</h5>
+                              <div class="price">$${p.price}</div>
+                              </div>
+                            <p class="card-text">${p.description}</p>
+                            <div class="d-flex gap-2">
+                              <a href="#" class="btn btn-primary w-100">Add to cart</a>
+                              <a href="#" class="btn btn-secondary w-100">Buy now</a>
+                              </div>
+                          </div>
+                          
+                        </div>
+                        
+                      `;
+                        $("#product-Data-Div").append(products);
+                    });
+                },
+                error: function (error) {
+                    console.log("Server Error:", error);
+                }
+            });
+        });
+
+     
+    </script>
+}
+
